@@ -1,0 +1,139 @@
+%\gdef\LogoPdDir{/Users/nil/LaTeX/NicolaLaurenti/LogoPd}
+\gdef\LogoPdDir{Figure}
+\newif\ifpdfgraph
+\pdfgraphfalse
+\DeclareOption{pdftex}{\pdfgraphtrue\PassOptionsToPackage{pdftex}{graphics}\PassOptionsToPackage{pdftex}{color}}
+\DeclareOption*{\PassOptionsToPackage\CurrentOption{graphics}\PassOptionsToPackage\CurrentOption{color}}
+\ProcessOptions
+\RequirePackage{graphics,color,DEIcolors}
+%
+% \logopd, \logopdblack, \logopdcolor, \logopdcolorblack, \logopdred, \logopdwhite
+%
+\def\l@g@pd(#1)[#2]{%
+	\resizebox{#2}{#2}{\includegraphics{\LogoPdDir/#1}}%
+}
+\def\l@g@pd@wrt(#1)[#2]{%
+	\resizebox{!}{#2}{\includegraphics{\LogoPdDir/#1}}%
+}
+%
+\ifpdfgraph
+\typeout{PDF-JPG option for logopd}
+%\DeclareGraphicsExtensions{.pdf,.jpg}
+\newcommand{\logopd}[1][15mm]{\l@g@pd(logopd.pdf)[#1]}
+\newcommand{\logopdblack}[1][15mm]{\l@g@pd(logopdi.jpg)[#1]}
+\newcommand{\logopdcolor}[1][15mm]{\l@g@pd(logopdc.jpg)[#1]}
+\newcommand{\logopdcolorblack}[1][15mm]{\l@g@pd(logopdcb.jpg)[#1]}
+\newcommand{\logopdred}[1][15mm]{\l@g@pd@wrt(logopdr.pdf)[#1]}
+\newcommand{\logopdcut}[1][15mm]{\l@g@pd@wrt(logopdrc.pdf)[#1]}
+\newcommand{\logopdwhite}[1][15mm]{\l@g@pd@wrt(logopdw.pdf)[#1]}
+\else
+\typeout{PS-EPS standard for logopd}
+%\DeclareGraphicsExtensions{.eps,.ps}
+\newcommand{\logopd}[1][15mm]{\l@g@pd(logopd.eps)[#1]}
+\newcommand{\logopdblack}[1][15mm]{\l@g@pd(logopdi.eps)[#1]}
+\newcommand{\logopdcolor}[1][15mm]{\l@g@pd(logopdc.ps)[#1]}
+\newcommand{\logopdcolorblack}[1][15mm]{\l@g@pd(logopdcb.ps)[#1]}
+\newcommand{\logopdred}[1][15mm]{\l@g@pd@wrt(logopdr.eps)[#1]}
+\newcommand{\logopdwhite}[1][15mm]{\l@g@pd@wrt(logopdw.eps)[#1]}
+\fi
+%
+% \linelogopd
+%
+\newcommand{\linelogopd}[1][22mm]{\begin{center}\logopd[#1]\end{center}}
+\newcommand{\linelogopdblack}[1][22mm]
+	{\begin{center}\logopdblack[#1]\end{center}}
+\newcommand{\linelogopdcolor}[1][22mm]
+	{\begin{center}\logopdcolor[#1]\end{center}}
+\newcommand{\linelogopdcolorblack}[1][22mm]
+	{\begin{center}\logopdcolorblack[#1]\end{center}}
+\newcommand{\linelogopdred}[1][22mm]
+	{\begin{center}\logopdred[#1]\end{center}}
+%
+% \logodei
+%
+\newcommand{\logodei}{\@ifstar{\logodei@file}{\logodei@tex}}
+%
+\newcommand{\logodei@file}[1][23mm]
+	{\ifpdfgraph\l@g@dei(logodei.pdf)[#1]\else\l@g@dei(logodei.eps)[#1]\fi}
+%
+\newcommand{\logodei@tex}[1][23mm]{\resizebox{#1}{!}{%
+\setlength{\unitlength}{1.28cm}%
+\begin{picture}(1,0.64)(0,0)%
+\renewcommand{\sfdefault}{phv}% 
+\color{deigray}\begin{sffamily}\begin{bfseries}
+\put(0,0.323){\resizebox{0.73\unitlength}{!}{DEPARTMENT OF}}
+\put(0,0.23){\resizebox{0.73\unitlength}{!}{INFORMATION}}
+\put(0,0.138){\resizebox{0.73\unitlength}{!}{ENGINEERING}}
+\put(0,0.091){\rule{0.73\unitlength}{0.006\unitlength}}
+\put(0,0){\resizebox{0.73\unitlength}{!}{UNIVERSITY OF PADOVA}}
+\drawcoldei%
+\end{bfseries}\end{sffamily}\end{picture}}}
+\def\l@g@dei(#1)[#2]{%
+	\resizebox{#2}{!}{\includegraphics{\LogoPdDir/#1}}%
+}
+
+
+
+
+%
+\newcommand{\coldei}{\coldei@tex}
+%
+\newcommand{\coldei@tex}[1][4.26mm]{\resizebox{#1}{!}{%
+\setlength{\unitlength}{1.28cm}%
+\begin{picture}(0.185,0.64)(0.815,0)%
+\color{deigray}\drawcoldei%
+\end{picture}}}
+%
+\newcommand\drawcoldei
+{\multiput(0.815,0)(0,0.0915){3}{\rule{0.165\unitlength}{0.021\unitlength}}%
+\multiput(0.815,0.2745)(0,0.0915){2}{\rule{0.135\unitlength}{0.021\unitlength}}%
+\put(0.95,0.2745){\resizebox{!}{0.114\unitlength}%
+{\includegraphics{\LogoPdDir/curvadei}}}%
+\put(0.8975,0.55){\color{deired}\circle*{0.18}}}
+%
+% \logodeinew
+%
+\newcommand{\logodeinew}{\@ifstar{\logodeinew@file}{\logodeinew@tex}}
+%
+\newcommand{\logodeinew@file}[1][23mm]
+	{\ifpdfgraph\l@g@dei(logodeinew.pdf)[#1]\else\l@g@dei(logodeinew.eps)[#1]\fi}
+%
+\newcommand{\logodeinew@tex}[1][23mm]{\resizebox{#1}{!}{%
+\setlength{\unitlength}{1.28cm}%
+\begin{picture}(1.07,0.64)(-0.287,0)%
+\color{UniPDred}
+\put(-0.265,0.003){\drawcoldeitikz}
+\renewcommand{\sfdefault}{phv}% 
+\begin{sffamily}
+\put(0,0.3){\scalebox{0.35}[0.53]{DIPARTIMENTO}}
+\put(0,0.15){\scalebox{0.35}[0.53]{DI INGEGNERIA}}
+\put(0,0){\scalebox{0.35}[0.53]{DELL'INFORMAZIONE}}
+\end{sffamily}\end{picture}}}
+\def\l@g@pd(#1)[#2]{%
+	\resizebox{#2}{#2}{\includegraphics{\LogoPdDir/#1}}%
+}
+\def\l@g@dei(#1)[#2]{%
+	\resizebox{#2}{!}{\includegraphics{\LogoPdDir/#1}}%
+}
+%
+\newcommand{\coldeinew}{\coldeinew@tex}
+%
+\newcommand{\coldeinew@tex}[1][4.26mm]{\resizebox{#1}{!}{%
+\setlength{\unitlength}{1.28cm}%
+\begin{picture}(0.185,0.64)(0.815,0)%
+\color{UniPDred}\drawcoldeitikz%
+\end{picture}}}
+%
+\newcommand\drawcoldeinew
+{\multiput(0.815,0)(0,0.0915){3}{\rule{0.165\unitlength}{0.021\unitlength}}%
+\multiput(0.815,0.2745)(0,0.0915){2}{\rule{0.135\unitlength}{0.021\unitlength}}%
+\put(0.95,0.2745){\resizebox{!}{0.114\unitlength}%
+{\includegraphics{\LogoPdDir/curvadei}}}%
+\put(0.8975,0.55){\color{UniPDred}\circle*{0.18}}}
+%
+\newcommand\drawcoldeitikz
+{\begin{tikzpicture}[x=\unitlength,y=\unitlength,draw=UniPDred,fill=UniPDred]%
+\draw[line width=0.021\unitlength] (0.815,0) -- + (0.165,0) ++ (0,0.0915) -- + (0.165,0) ++ (0,0.0915) -- + (0.165,0) ++ (0,0.0915) -- ++ (0.135,0) arc (-90:90:0.04575\unitlength) -- ++ (-0.135,0);
+\fill (0.8975,0.55) circle (0.09\unitlength);
+\end{tikzpicture}}
+%

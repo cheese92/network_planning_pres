@@ -1,0 +1,374 @@
+\usepackage{ifthen}
+\newboolean{bib@boz}
+\newboolean{it@li@no}
+\newboolean{be@m@r}
+\newboolean{unkn@wn}
+\newboolean{sh@rt}
+\DeclareOption{draft}{\setboolean{bib@boz}{true}}
+\DeclareOption{italian}{\setboolean{it@li@no}{true}}
+\DeclareOption{beamer}{\setboolean{be@m@r}{true}}
+\DeclareOption{short}{\setboolean{sh@rt}{true}}
+\ProcessOptions
+\newcommand{\setunkn@wn}{\setboolean{unkn@wn}{true}}
+\newcommand\kn@w{\setboolean{unkn@wn}{false}}
+\newcommand{\bibbozze}{\setboolean{bib@boz}{true}}
+\newcommand{\nobibbozze}{\setboolean{bib@boz}{false}}
+\newcommand{\bibita}{\setboolean{it@li@no}{true}}
+\newcommand\bibk@y[1]{{\upshape\bfseries\ttfamily{#1}}}
+\newcommand\mybibitem[2][default]{%
+    \ifthenelse{\boolean{be@m@r}}{\setbeamertemplate{bibliography item}[#1]}{}%
+    \ifthenelse{\boolean{bib@boz}}{\bibitem[\bibk@y{#2}]{#2}}{\bibitem{#2}}}
+\newcommand\format@lib[3]{\ifthenelse{\boolean{be@m@r}}%
+	{#1\newblock{\itshape #2}\newblock #3.}{#1, \textit{#2}, #3.}}
+\newcommand\format@art[4]{\ifthenelse{\boolean{be@m@r}}%
+	{#1\newblock``#2''\newblock{\itshape\journalcolor #3}%
+		\ifthenelse{\boolean{sh@rt}}{, #4.}{\par #4.}}%
+	{#1, ``#2,'' \textit{#3}, #4.}}
+\newcommand\format@provv[3]{\ifthenelse{\boolean{be@m@r}}%
+	{#1\newblock``#2''\newblock #3.}{#1, ``#2,'' #3.}}
+\newcommand{\art}[5]{\mybibitem[article]{#1} \format@art{#2}{#3}{#4}{#5}}%
+\newcommand{\lib}[4]{\mybibitem[book]{#1} \format@lib{#2}{#3}{#4}}%
+\newcommand{\provv}[4]{\mybibitem[temp]{#1} \format@provv{#2}{#3}{#4}}
+\ifthenelse{\boolean{be@m@r}}{\defbeamertemplate{bibliography item}{temp}%
+  {\lower3.5pt\hbox{\hskip2pt\pgfimage{beamericonarticletemp}\hskip1pt}}%
+  \newcommand{\journalcolor}{\color{bibliography entry author.fg}}}{}
+
+\newcommand{\subm}[1]{\ifthenelse{\boolean{it@li@no}}
+	{sottoposto a \textit{#1} per la pubblicazione}
+	{submitted for publication to \textit{#1}}}
+\newcommand{\acc}[1]{\ifthenelse{\boolean{it@li@no}}
+	{accettato per la pubblicazione su \textit{#1}}
+	{accepted for publication in \textit{#1}}}
+\newcommand{\tobe}[1]{\ifthenelse{\boolean{it@li@no}}
+	{in corso di pubblicazione su \textit{#1}}
+	{to be published in \textit{#1}}}
+\newcommand{\submcf}[1]{\ifthenelse{\boolean{it@li@no}}
+	{sottoposto per la presentazione a \textit{#1}}
+	{submitted for presentation at \textit{#1}}}
+\newcommand{\acccf}[1]{\ifthenelse{\boolean{it@li@no}}
+	{accettato per la presentazione a \textit{#1}}
+	{accepted for presentation in \textit{#1}}}
+
+\newcommand{\appat}[1][x]{\ifthenelse{\boolean{it@li@no}}{%
+	\ifthenelse{\equal{#1}{x}}%
+		{domanda di brevetto}{}%
+	\ifthenelse{\equal{#1}{i}}%
+		{domanda di brevetto italiano}{}%
+	\ifthenelse{\equal{#1}{e}}%
+		{domanda di brevetto europeo}{}%
+	\ifthenelse{\equal{#1}{u}}%
+		{domanda di brevetto statunitense}{}%
+	}{%
+	\ifthenelse{\equal{#1}{x}}%
+		{Patent application}{}%
+	\ifthenelse{\equal{#1}{i}}%
+		{Italian Patent application}{}%
+	\ifthenelse{\equal{#1}{e}}%
+		{European Patent application}{}%
+	\ifthenelse{\equal{#1}{u}}%
+		{U. S. Patent application}{}%
+	}}
+\newcommand{\pat}[2][x]{\ifthenelse{\boolean{it@li@no}}{brevetto
+	\ifthenelse{\equal{#1}{x}}%
+		{}{}%
+	\ifthenelse{\equal{#1}{i}}%
+		{italiano}{}%
+	\ifthenelse{\equal{#1}{e}}%
+		{europeo}{}%
+	\ifthenelse{\equal{#1}{u}}%
+		{statunitense}{}%
+	}{%
+	\ifthenelse{\equal{#1}{x}}%
+		{}{}%
+	\ifthenelse{\equal{#1}{i}}%
+		{Italian}{}%
+	\ifthenelse{\equal{#1}{e}}%
+		{European}{}%
+	\ifthenelse{\equal{#1}{u}}%
+		{U. S.}{}%
+	Patent} n.~#2}
+\newcommand\patdep[1]
+	{\ifthenelse{\boolean{it@li@no}}{depositato il}{filed}  \cdmy(#1)}
+\newcommand\patpub[1]
+	{\ifthenelse{\boolean{it@li@no}}{pubblicato il}{published}  \cdmy(#1)}
+\newcommand{\bibcap}[1]{\subsection*{#1}\nopagebreak}
+\newcommand{\jour}{\tran}
+\newcommand\tran[1]{\setunkn@wn\ifthenelse{\boolean{sh@rt}}%
+	{\tran@short{#1}}{\tran@long{#1}}%
+	\ifthenelse{\boolean{unkn@wn}}%
+	{\ifthenelse{\boolean{it@li@no}}%
+		{{\bfseries sigla di rivista #1 sconosciuta}}%
+		{{\bfseries unknown journal acronym #1}}%
+	}{}%
+}
+\newcommand{\tran@long}[1]{%
+	\ifthenelse{\equal{#1}{BSTJ}}%
+		{\kn@w Bell System Technical Journal}{}%
+	\ifthenelse{\equal{#1}{COM}}%
+		{\kn@w IEEE Transactions on Communications}{}%
+	\ifthenelse{\equal{#1}{WCOM}}%
+		{\kn@w IEEE Transactions on Wireless Communications}{}%
+	\ifthenelse{\equal{#1}{CL}}%
+		{\kn@w IEEE Communications Letters}{}%
+	\ifthenelse{\equal{#1}{SP}}%
+		{\kn@w IEEE Transactions on Signal Processing}{}%
+	\ifthenelse{\equal{#1}{SPL}}%
+		{\kn@w IEEE Signal Processing Letters}{}%
+	\ifthenelse{\equal{#1}{JSAC}}%
+		{\kn@w IEEE Journal on Selected Areas in Communications}{}%
+	\ifthenelse{\equal{#1}{VT}}%
+		{\kn@w IEEE Transactions on Vehicular Technology}{}%
+	\ifthenelse{\equal{#1}{IT}}%
+		{\kn@w IEEE Transactions on Information Theory}{}%
+	\ifthenelse{\equal{#1}{IFS}}%
+		{\kn@w IEEE Transactions on Information Forensics and Security}{}%
+	\ifthenelse{\equal{#1}{EL}}%
+		{\kn@w Electronics Letters}{}%
+	\ifthenelse{\equal{#1}{CE}}%
+		{\kn@w IEEE Transactions on Consumer Electronics}{}%
+	\ifthenelse{\equal{#1}{MCOM}}%
+		{\kn@w IEEE Communications Magazine}{}%
+	\ifthenelse{\equal{#1}{MWC}}%
+		{\kn@w IEEE Wireless Communications Magazine}{}%
+	\ifthenelse{\equal{#1}{CAS}}%
+		{\kn@w IEEE Transactions on Circuits and Systems}{}%
+	\ifthenelse{\equal{#1}{CAS-II}}%
+		{\kn@w IEEE Transactions on Circuits and Systems II: Express Briefs}{}%
+	\ifthenelse{\equal{#1}{CT}}%
+		{\kn@w IEEE Transactions on Circuit Theory}{}%
+	\ifthenelse{\equal{#1}{COT}}%
+		{\kn@w IEEE Transactions on Communication Technology}{}%
+	\ifthenelse{\equal{#1}{ETT}}%
+		{\kn@w European Transactions on Telecommunications and Related Technologies}{}%
+	\ifthenelse{\equal{#1}{MULT}}%
+		{\kn@w Multidimensional Systems and Signal Processing}{}%
+	\ifthenelse{\equal{#1}{AC}}%
+		{\kn@w IEEE Transactions on Automatic Control}{}%
+	\ifthenelse{\equal{#1}{PRO}}%
+		{\kn@w Proceedings of the IEEE}{}%
+	\ifthenelse{\equal{#1}{AES}}%
+		{\kn@w Journal of the Audio Engineering Society}{}%
+	\ifthenelse{\equal{#1}{ASSP}}%
+		{\kn@w IEEE Transactions on Acoustics, Speech and Signal Processing}{}%
+	\ifthenelse{\equal{#1}{SAP}}%
+		{\kn@w IEEE Transactions on Speech and Audio Processing}{}%
+	\ifthenelse{\equal{#1}{AP}}%
+		{\kn@w IEEE Transactions on Antennas and Propagation}{}%
+	\ifthenelse{\equal{#1}{MONET}}%
+		{\kn@w Journal on Special Topics in Mobile Networks and Applications}{}%
+}
+\newcommand{\tran@short}[1]{%
+	\ifthenelse{\equal{#1}{BSTJ}}%
+		{\kn@w Bell Syst.\ Tech.\ J.}{}%
+	\ifthenelse{\equal{#1}{COM}}%
+		{\kn@w IEEE Trans.\ Comm.}{}%
+	\ifthenelse{\equal{#1}{WCOM}}%
+		{\kn@w IEEE Trans.\ Wireless Comm.}{}%
+	\ifthenelse{\equal{#1}{CL}}%
+		{\kn@w IEEE Comm.\ Lett.}{}%
+	\ifthenelse{\equal{#1}{SP}}%
+		{\kn@w IEEE Trans.\ Sig.\ Proc.}{}%
+	\ifthenelse{\equal{#1}{SPL}}%
+		{\kn@w IEEE Sig.\ Proc.\ Lett.}{}%
+	\ifthenelse{\equal{#1}{JSAC}}%
+		{\kn@w IEEE J.\ Sel.\ Ar.\ Comm.}{}%
+	\ifthenelse{\equal{#1}{VT}}%
+		{\kn@w IEEE Trans.\ Veh.\ Tech.}{}%
+	\ifthenelse{\equal{#1}{IT}}%
+		{\kn@w IEEE Trans.\ Inf.\ Th.}{}%
+	\ifthenelse{\equal{#1}{IFS}}%
+		{\kn@w IEEE Trans.\ Inf.\ For.\ Sec.}{}%
+	\ifthenelse{\equal{#1}{EL}}%
+		{\kn@w Electronics Letters}{}%
+	\ifthenelse{\equal{#1}{CE}}%
+		{\kn@w IEEE Trans.\ on Consum.\ Electron.}{}%
+	\ifthenelse{\equal{#1}{MCOM}}%
+		{\kn@w IEEE Commun.\ Mag.}{}%
+	\ifthenelse{\equal{#1}{MWC}}%
+		{\kn@w IEEE Wireless Commun.\ Mag.}{}%
+	\ifthenelse{\equal{#1}{CAS}}%
+		{\kn@w IEEE Trans.\ Circuits Syst.}{}%
+	\ifthenelse{\equal{#1}{CAS-II}}%
+		{\kn@w IEEE Trans.\ on Circuits and Systems II: Express Briefs}{}%
+	\ifthenelse{\equal{#1}{CT}}%
+		{\kn@w IEEE Trans.\ on Circuit Theory}{}%
+	\ifthenelse{\equal{#1}{COT}}%
+		{\kn@w IEEE Trans.\ on Communication Technology}{}%
+	\ifthenelse{\equal{#1}{ETT}}%
+		{\kn@w European Trans.\ on Telecommunications}{}%
+	\ifthenelse{\equal{#1}{MULT}}%
+		{\kn@w Multidimensional Systems and Signal Processing}{}%
+	\ifthenelse{\equal{#1}{AC}}%
+		{\kn@w IEEE Trans.\ on Automatic Control}{}%
+	\ifthenelse{\equal{#1}{PRO}}%
+		{\kn@w Proceedings of the IEEE}{}%
+	\ifthenelse{\equal{#1}{AES}}%
+		{\kn@w Journal of the Audio Engineering Society}{}%
+	\ifthenelse{\equal{#1}{ASSP}}%
+		{\kn@w IEEE Trans.\ on Acoustics, Speech and Signal Processing}{}%
+	\ifthenelse{\equal{#1}{SAP}}%
+		{\kn@w IEEE Trans.\ on Speech and Audio Processing}{}%
+	\ifthenelse{\equal{#1}{AP}}%
+		{\kn@w IEEE Trans.\ Antennas Prop.}{}%
+	\ifthenelse{\equal{#1}{MONET}}%
+		{\kn@w Mob.\ Netw.\ Appl.}{}%
+}
+
+\def\vnpd(#1,#2,#3-#4,#5/#6){\ifthenelse{\boolean{sh@rt}}%
+{#1(#2): {#3}--{#4}, \ye@r{#6}}%
+{vol.~{#1}, n.~{#2}, \p@ges~{#3}--{#4}, \m@nth{#5} \ye@r{#6}}}
+
+\def\pd(#1-#2,#3){\ifthenelse{\boolean{sh@rt}}%
+{{#1}--{#2}, \ye@r{#3}}%
+{\p@ges~{#1}--{#2}, \ye@r{#3}}}
+
+\def\vpd(#1,#2-#3,#4){\ifthenelse{\boolean{sh@rt}}%
+{#1: {#2}--{#3}, \ye@r{#4}}%
+{vol.~{#1}, \p@ges~{#2}--{#3}, \ye@r{#4}}}
+
+\def\vnpdd(#1,#2,#3-#4,#5/#6/#7){\ifthenelse{\boolean{sh@rt}}%
+{#1(#2): {#3}--{#4}, \ye@r{#7}}%
+{vol.~{#1}, n.~{#2}, \p@ges~{#3}--{#4}, #5 \m@nth{#6} \ye@r{#7}}}
+
+\newcommand{\m@nth}[1]{%
+\ifthenelse{\boolean{it@li@no}}{%
+	\ifthenelse{#1 = 1}{gennaio}{}%
+	\ifthenelse{#1 = 2}{febbraio}{}%
+	\ifthenelse{#1 = 3}{marzo}{}%
+	\ifthenelse{#1 = 4}{aprile}{}%
+	\ifthenelse{#1 = 5}{maggio}{}%
+	\ifthenelse{#1 = 6}{giugno}{}%
+	\ifthenelse{#1 = 7}{luglio}{}%
+	\ifthenelse{#1 = 8}{agosto}{}%
+	\ifthenelse{#1 = 9}{settembre}{}%
+	\ifthenelse{#1 = 10}{ottobre}{}%
+	\ifthenelse{#1 = 11}{novembre}{}%
+	\ifthenelse{#1 = 12}{dicembre}{}%
+	\ifthenelse{#1 = 21}{primavera}{}%
+	\ifthenelse{#1 = 22}{estate}{}%
+	\ifthenelse{#1 = 23}{autunno}{}%
+	\ifthenelse{#1 = 24}{inverno}{}%
+}{%
+	\ifthenelse{#1 = 1}{January}{}%
+	\ifthenelse{#1 = 2}{February}{}%
+	\ifthenelse{#1 = 3}{March}{}%
+	\ifthenelse{#1 = 4}{April}{}%
+	\ifthenelse{#1 = 5}{May}{}%
+	\ifthenelse{#1 = 6}{June}{}%
+	\ifthenelse{#1 = 7}{July}{}%
+	\ifthenelse{#1 = 8}{August}{}%
+	\ifthenelse{#1 = 9}{September}{}%
+	\ifthenelse{#1 = 10}{October}{}%
+	\ifthenelse{#1 = 11}{November}{}%
+	\ifthenelse{#1 = 12}{December}{}%
+	\ifthenelse{#1 = 21}{Spring}{}%
+	\ifthenelse{#1 = 22}{Summer}{}%
+	\ifthenelse{#1 = 23}{Fall}{}%
+	\ifthenelse{#1 = 24}{Winter}{}%
+}}
+
+\newcommand{\ye@r}[1]{%
+	\ifthenelse{#1 < 15}{20#1}{%
+	\ifthenelse{#1 < 100}{19#1}{#1}}}
+\newcommand{\ye@r@bb}[1]{%
+	\ifthenelse{#1 < 3}{20#1}{%
+	\ifthenelse{#1 < 100}{`#1}{#1}}}
+
+\newcommand{\p@ges}{\ifthenelse{\boolean{it@li@no}}{pagg.}{pp.}}
+\newcommand\conf[2]{\setunkn@wn\ifthenelse{\boolean{sh@rt}}%
+	{\conf@short{#1}{#2}}{\conf@long{#1}{#2}}%
+	\ifthenelse{\boolean{unkn@wn}}%
+	{\ifthenelse{\boolean{it@li@no}}%
+		{{\bfseries sigla di convegno #1 sconosciuta}}%
+		{{\bfseries unknown conference acronym #1}}%
+	}{}%
+}
+
+\newcommand{\conf@long}[2]{Proceedings of %
+	\ifthenelse{\equal{#1}{ICC}}%
+		{\kn@w\ye@r{#2} IEEE International Conference on 
+			Communications, ICC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{GLO}}%
+		{\kn@w\ye@r{#2} IEEE Global Telecommunications Conference, 
+			GLOBECOM \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{ISIT}}%
+		{\kn@w\ye@r{#2} IEEE International Symposium on Information Theory, 
+			ISIT \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{ICASSP}}%
+		{\kn@w\ye@r{#2} IEEE International Conference on Acoustics, 
+			Speech and Signal Processing, ICASSP \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{VTC}}%
+		{\kn@w\ye@r{#2} IEEE Vehicular Technology Conference, 
+			VTC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{VTC-F}}%
+		{Fall \kn@w\ye@r{#2} IEEE Vehicular Technology Conference, 
+			VTC \ye@r@bb{#2}-Fall}{}%
+	\ifthenelse{\equal{#1}{VTC-S}}%
+		{Spring \kn@w\ye@r{#2} IEEE Vehicular Technology Conference, 
+			VTC \ye@r@bb{#2}-Spring}{}%
+	\ifthenelse{\equal{#1}{MILCOM}}%
+		{\kn@w\ye@r{#2} IEEE Military Communications Conference, 
+			MILCOM \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{EMBC}}%
+		{\kn@w\ye@r{#2} International Conference of the IEEE 
+			Engineering in Medicine and Biology Society, 
+			EMBS \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{PIMRC}}%
+		{\kn@w\ye@r{#2} IEEE International Symposium on Personal, 
+		Indoor and Mobile Radio Communications, PIMRC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{ICUWB}}%
+		{\kn@w\ye@r{#2} IEEE International Conference on 
+		Ultra-Wideband, ICUWB \ye@r@bb{#2}}{}%
+}
+\newcommand{\conf@short}[2]{%
+	\ifthenelse{\equal{#1}{VTC}}{\kn@w VTC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{VTC-F}}{\kn@w VTC \ye@r@bb{#2}-Fall}{}%
+	\ifthenelse{\equal{#1}{VTC-S}}{\kn@w VTC \ye@r@bb{#2}-Spring}{}%
+	\ifthenelse{\equal{#1}{ICC}}{\kn@w ICC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{GLO}}{\kn@w GLOBECOM \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{ISIT}}{\kn@w ISIT \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{ICASSP}}{\kn@w ICASSP \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{MILCOM}}{\kn@w MILCOM \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{EMBC}}{\kn@w EMBC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{PIMRC}}{\kn@w PIMRC \ye@r@bb{#2}}{}%
+	\ifthenelse{\equal{#1}{ICUWB}}{\kn@w ICUWB \ye@r@bb{#2}}{}%
+}
+\def\cmy(#1/#2){\m@nth{#1} \ye@r{#2}}
+\def\cdmy(#1/#2/#3){#1 \m@nth{#2} \ye@r{#3}}
+\def\cddmy(#1-#2/#3/#4){#1--#2 \m@nth{#3} \ye@r{#4}}
+\def\cdmdmy(#1/#2-#3/#4/#5){#1 \m@nth{#2} -- #3 \m@nth{#4} \ye@r{#5}}
+\def\cvp(#1,#2-#3){\ifthenelse{\boolean{sh@rt}}{vol.~#1: #2--#3}{vol.~#1, \p@ges~#2--#3}}
+\def\cp(#1-#2){\ifthenelse{\boolean{sh@rt}}{#1--#2}{\p@ges~#1--#2}}
+
+\newcommand{\publ}[1]{\setunkn@wn%
+	\ifthenelse{\equal{#1}{AP}}%
+		{\kn@w Academic Press, New York}{}%
+	\ifthenelse{\equal{#1}{AW}}%
+		{\kn@w Addison-Wesley, Reading}{}%
+	\ifthenelse{\equal{#1}{CUP}}%
+		{\kn@w Cambridge University Press, Cambridge}{}%
+	\ifthenelse{\equal{#1}{KAP}}%
+		{\kn@w Kluwer Academic Publishers, Boston}{}%
+	\ifthenelse{\equal{#1}{SV}}%
+		{\kn@w Springer-Verlag, New York}{}%
+	\ifthenelse{\equal{#1}{SV-UK}}%
+		{\kn@w Springer-Verlag, London}{}%
+	\ifthenelse{\equal{#1}{IEEE}}%
+		{\kn@w IEEE Press, New York}{}%
+	\ifthenelse{\equal{#1}{PH}}%
+		{\kn@w Prentice Hall, Englewood Cliffs}{}%
+	\ifthenelse{\equal{#1}{G&B}}%
+		{\kn@w Gordon and Breach Science Publishers, New York}{}%
+	\ifthenelse{\equal{#1}{MGH}}%
+		{\kn@w McGraw-Hill, New York}{}%
+	\ifthenelse{\equal{#1}{JWS}}%
+		{\kn@w John Wiley \& Sons, Chichester}{}%
+	\ifthenelse{\boolean{unkn@wn}}%
+	{\ifthenelse{\boolean{it@li@no}}%
+		{{\bfseries sigla di editore #1 sconosciuta}}%
+		{{\bfseries unknown publisher acronym #1}}%
+	}{}%
+}
+
+\newcommand{\siteurl}[1]{WEB resource at URL: {\mdseries\upshape\ttfamily #1}}
+\newcommand{\sitepa}[2]{as published #1, accessed #2}

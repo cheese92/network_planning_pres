@@ -1,0 +1,244 @@
+\newif\iftikz
+\DeclareOption{tikz}{\tikztrue}
+\ProcessOptions
+%
+%%% INDIPENDENTI DA TIKZ	
+\usepackage{ifthen}
+\newlength{\mb@height}
+\newcommand{\marginbox}[1]{\leavevmode%
+    \vbox{\vskip\fboxsep\hbox{\kern\fboxsep{#1}\kern\fboxsep}\vskip\fboxsep}}
+\def\wm(#1;#2)#3{\wt(#1;#2){$#3$}}
+\def\wmc(#1;#2)[#3]#4{\wt(#1;#2){${\color{#3}#4}$}}
+\def\wt(#1;#2)#3{\put(#1){\makebox(0,0)[#2]{\marginbox{#3}}}}
+\def\wtc(#1;#2)[#3]#4{\wt(#1;#2){{\color{#3}#4}}}
+\newcommand\stemdot{\@circ{1mm}{112}}
+\newcommand\stemo{\@circ{1mm}{96}}
+\def\stem(#1,#2){\path(#1,0)(#1,#2)\put(#1,#2){\stemdot}}
+\def\strem(#1)(#2){\path(#1)(#2)\put(#2){\stemdot}}
+\def\impid(#1,#2)%
+	{\path(#1,0)(#1,#2)\put(#1,#2){\makebox(0,0){$\scriptstyle\triangle$}}}
+\newcommand{\figurac}[2][1cm]
+	{\begin{center}\setlength{\unitlength}{#1}#2\end{center}}
+\def\assi{\@ifnextchar [ {\@assi}{\@assi[b]}}
+\def\@assi[#1](#2,#3)(#4,#5)#6{\begin{picture}(#4,#5)(#2,#3)#6%
+	\ifx#1h\put(#2,0){\vector(1,0){#4}}\fi%
+	\ifx#1v\put(0,#3){\vector(0,1){#5}}\fi%
+	\ifx#1b\put(#2,0){\vector(1,0){#4}}\put(0,#3){\vector(0,1){#5}}\fi%
+	\ifx#1p\put(#2,0){\put(#4,0){\vector(1,0)0}}%
+		\put(0,#3){\put(0,#5){\vector(0,1)0}}\fi%
+	\ifx#1f\put(#2,#3){\framebox(#4,#5){}}\fi%
+	\ifx#1n\fi%
+	\end{picture}}
+\newcommand{\figuradis}[3][1cm]
+	{\quad\setlength{\unitlength}{#1}\raisebox{-#2}{#3}}
+\def\graf(#1,#2)(#3,#4)#5%
+   {\put(#1,#2){\resizebox{#3\unitlength}{#4\unitlength}{\includegraphics{#5}}}}
+\newcommand\tacca[1]{\makebox(0,0){\ifx#1v\rule{\linethickness}{1mm}\else%
+	\rule{1mm}{\linethickness}\fi}}
+\newcommand\tacche[4]{\ifx#1y\multiput(0,#3)(0,#2){#4}{\tacca h}\else%
+	\multiput(#3,0)(#2,0){#4}{\tacca v}\fi}	
+%\newcommand\quote[5][n]{\ifx#2x\@quote()
+%\setcounter\quota{#3}\setcounter\giro{#4}%
+%\loop\wm()\ifx#1\multiput(0,#3)(0,#2){#4}{\tacca h}\else%
+%	\multiput(#3,0)(#2,0){#4}{\tacca v}}
+\def\fbrace(#1;#2;#3)#4{\ifx#2t%
+  \wm(#1;b){\overbrace{\rule{#3\unitlength}{0\unitlength}}^{\textstyle #4}}\fi%
+\ifx#2b%
+  \wm(#1;t){\underbrace{\rule{#3\unitlength}{0\unitlength}}_{\textstyle #4}}\fi}
+%	
+\iftikz
+%%% CON TIKZ	
+\newcommand\ifempty[1]{\ifthenelse{\equal{#1}{}}}
+% \usepackage{pgflibraryarrows} % outdated
+\usetikzlibrary{arrows}
+\newcommand\@nch@r[1]{\ifx#1reast\fi\ifx#1lwest\fi%
+	\ifx#1tnorth\fi\ifx#1bsouth\fi%
+	\ifx#1eeast\fi\ifx#1wwest\fi%
+	\ifx#1nnorth\fi\ifx#1ssouth\fi\ifx#1ccenter\fi%
+	\ifx#11north east\fi\ifx#12north west\fi%
+	\ifx#13south west\fi\ifx#14south east\fi}
+\def\wmt(#1;#2)#3{\ifx#2t\tick(#1;v)\fi\ifx#2b\tick(#1;v)\fi%
+	\ifx#2l\tick(#1;h)\fi\ifx#2r\tick(#1;h)\fi\wt(#1;#2){$#3$}}%
+\def\wmct(#1;#2)[#3]#4{{\color{#3}%
+	\ifx#2t\tick(#1;v)\fi\ifx#2b\tick(#1;v)\fi%
+	\ifx#2l\tick(#1;h)\fi\ifx#2r\tick(#1;h)\fi}%
+	\wt(#1;#2){{$\color{#3}#4$}}}%
+\def\wf(#1;#2)#3{\wt(#1;#2){\footnotesize$#3$}}%
+\def\wt@tikz(#1;#2)#3{\node[inner sep=\fboxsep,anchor=\@nch@r{#2}]at(#1){#3};}
+\def\wt{\wt@tikz}
+\def\tick(#1;#2){\ifx#2v\draw(#1)+(0mm,-0.5mm)--+(0mm,0.5mm);\fi%
+	\ifx#2h\draw(#1)+(-0.5mm,0mm)--+(0.5mm,0mm);\fi}
+\newcommand\wht[2]{node[inner sep=\fboxsep,anchor=\@nch@r{#1}]{#2}}
+\newcommand\wh[2]{\wht{#1}{$#2$}}
+\newcommand\whct[3]{node[inner sep=\fboxsep,text=#2,anchor=\@nch@r{#1}]{#3}}
+\newcommand\whc[3]{\wh{#1}{\color{#2}#3}}
+\newcommand\stemdothere{coordinate(stem@here);\fill (stem@here) circle (0.5mm);}
+\def\stem@tikz(#1,#2){\draw(#1,0)(#1,#2);\fill (#1,#2) circle (0.5mm);}
+\def\strem@tikz(#1,#2,#3){\draw(#1,0,0)(#1,#2,#3);\fill (#1,#2,#3) circle (0.5mm);}
+\def\impid(#1,#2)%
+	{\path(#1,0)(#1,#2)\put(#1,#2){\makebox(0,0){$\scriptstyle\triangle$}}}
+\def\orthput(#1)(#2,#3)[#4,#5]#6%
+	{\multiput(#1)(#2,0){#4}{\multiput(0,0)(0,#3){#5}{#6}}}
+%	{\matrixput(#1)(#2,0){#4}(0,#3){#5}{#6}}
+
+\def\setcurr(#1){\node (curr@pt) at (#1){};}
+\newcommand{\spago}{\@ifnextchar({\sp@go}{\sp@go(\sp@len)}}
+\def\sp@go(#1){\@ifnextchar[{\sp@g@(#1)}{\sp@g@(#1)[midway]}}
+\def\sp@g@(#1)[#2]#3#4{\draw[-latex] (curr@pt)--++(#1,0mm) 
+	node[#2,above]{$#3$} node[#2,below]{$#4$} coordinate(curr@pt);}
+\newcommand{\spagol}{\@ifnextchar({\sp@gol}{\sp@gol(\sp@len)}}
+\def\sp@gol(#1){\@ifnextchar[{\sp@g@l(#1)}{\sp@g@l(#1)[midway]}}
+\def\sp@g@l(#1)[#2]#3#4{\draw (curr@pt)--++(#1,0mm) 
+	node[#2,above]{$#3$} node[#2,below]{$#4$} coordinate(curr@pt);}
+\newcommand{\spagov}{\@ifnextchar({\sp@gov}{\sp@gov(\sp@len)}}
+\def\sp@gov(#1){\@ifnextchar[{\sp@g@v(#1)}{\sp@g@v(#1)[midway]}}
+\def\sp@g@v(#1)[#2]#3#4{\draw[-latex,thick] (curr@pt)--++(#1,0mm) 
+	node[#2,above]{$#3$} node[#2,below]{$#4$} coordinate(curr@pt);}
+\newcommand{\blocco}{\@ifnextchar({\bl@cco}{\bl@cco(\bl@wid,\bl@hei)}}
+\def\bl@cco(#1,#2){\@ifnextchar[{\bl@cc@(#1,#2)}{\bl@cc@(#1,#2)[]}}
+\def\bl@cc@(#1,#2)[#3]#4{\path (curr@pt)
+node[anchor=west,draw,minimum width=#1,minimum height=#2](curr@bl){$#4$}
+(curr@bl.north) node[anchor=south]{#3} (curr@bl.east) coordinate(curr@pt);}
+\def\superblocco(#1,#2)[#3]#4{\path (curr@pt)
+node[anchor=west,fill=black,fill opacity = 0.2,minimum width=#1,minimum height=#2](curr@bl){$#4$}
+(curr@bl.north) node[anchor=south]{#3} (curr@bl.east) coordinate(curr@pt);}
+\newcommand{\cerchio}{\@ifnextchar({\c@rchio}{\c@rchio(\ci@dia,\ci@spl)}}
+\def\c@rchio(#1,#2){\@ifnextchar[{\c@rchi@(#1,#2)}{\c@rchi@(#1,#2)[+;south]}}
+\def\c@rchi@(#1,#2)[#3;#4]#5{\draw[-latex] (curr@pt) 
+node[draw,circle,anchor=west,inner sep=1pt,minimum size=#1](curr@bl){$#3$}
+ (curr@bl.#4) ++(#4:#2) node(curr@cl){$#5$} (curr@cl)--(curr@bl); \path  (curr@bl.east) coordinate(curr@pt);}
+\newcommand{\cerchiov}{\@ifnextchar({\c@rchiov}{\c@rchiov(\ci@dia,\ci@spl)}}
+\def\c@rchiov(#1,#2){\@ifnextchar[{\c@rchi@v(#1,#2)}{\c@rchi@v(#1,#2)[+;south]}}
+\def\c@rchi@v(#1,#2)[#3;#4]#5{\draw[-latex,thick] (curr@pt) node[draw,circle,thin,anchor=west,inner sep=1pt,minimum size=#1](curr@bl){$#3$}
+ (curr@bl.#4) ++(#4:#2) node(curr@cl){$#5$} (curr@cl)--(curr@bl); \path  (curr@bl.east) coordinate(curr@pt);}
+\newcommand\mcerchio{\@ifnextchar({\mc@rchio}{\mc@rchio(\ci@dia)}}
+\def\mc@rchio(#1){\@ifnextchar[%
+	{\mc@rchi@(#1)}{\mc@rchi@(#1)[0.5\sp@len,1.5\bl@hei]}}
+\def\mc@rchi@(#1)[#2,#3]#4{\setlength{\ramo@hei}{#3}\path (curr@pt)++(#2,0mm) 
+	node[draw,circle,inner sep=1pt,minimum size=#1](curr@bl){$+$}; 
+	\foreach \yramo in {#4}
+		{\draw[-latex] (curr@pt) ++(0mm,\yramo\ramo@hei)--(curr@bl);}
+	\coordinate(curr@pt) at (curr@bl.east);}
+\newcommand{\amplif}{\@ifnextchar({\@mplif}{\@mplif(\amp@rad)}}
+\def\@mplif(#1)#2{\setlength\tmp@len{#1}\setlength\tmp@len{0.5\tmp@len}
+\draw (curr@pt) ++(\tmp@len,0mm) node(curr@bl){$#2$} +(0:#1) coordinate(curr@pt) -- +(120:#1) -- +(-120:#1) -- cycle;}
+\newcommand{\parall}[3][1.5\bl@hei]{\coordinate (init@par) at (curr@pt); \setlength{\ramo@hei}{#1}\foreach \yramo/\lab in {#2} {\path(init@par)++(0mm,\yramo\ramo@hei) coordinate(curr@pt); #3} 
+\path(curr@pt)|-(init@par) node[midway](curr@pt){};}
+\newcommand\ramo[1][\ramo@hei]{}
+\newenvironment{paralltf}[2][1.5\bl@hei]{%
+\setlength{\ramo@hei}{#1}\setcounter{ramonum}{#2}}{}
+\newcommand\colornode[3]{\begin{scope}\tikzstyle{every node}=[draw=#1,fill=#2]#3\end{scope}}
+\newlength\sp@len
+\newlength\bl@wid
+\newlength\bl@hei
+\newlength\ci@dia
+\newlength\ci@spl
+\newlength\amp@rad
+\newlength\tmp@len
+\newlength\tf@unit
+\newlength\ramo@hei
+\def\sizeblo(#1,#2){\setlength\bl@wid{#1}\setlength\bl@hei{#2}}
+\def\sizecir(#1,#2){\setlength\ci@dia{#1}\setlength\ci@spl{#2}}
+\def\sizespa(#1){\setlength\sp@len{#1}}
+\def\sizeamp(#1){\setlength\amp@rad{#1}}
+\newenvironment{cascatatf}[1][3mm]
+	{\begin{center}\begin{tikzpicture}%
+	\renewcommand{\wt}{\wt@tikz}%
+	\setlength\tf@unit{#1}\setlength\sp@len{4\tf@unit}
+	\setlength\ci@dia{\tf@unit}\setlength\ci@spl{3\tf@unit}
+	\setlength\bl@wid{5\tf@unit}\setlength\bl@hei{3\tf@unit}
+	\setlength\amp@rad{2\tf@unit}\setlength{\unitlength}{\tf@unit}
+	\pgfsetxvec{\pgfpoint{\tf@unit}{0mm}}
+	\pgfsetyvec{\pgfpoint{0mm}{\tf@unit}}
+	\coordinate(curr@pt) at (0pt,0pt);}
+	{\end{tikzpicture}\end{center}}
+\newcommand{\eqcascata}{\path 
+	(curr@pt) node[anchor=west,minimum width=\bl@wid](curr@bl){$=$} 
+	 coordinate(curr@pt) at (curr@bl.east);}
+\newcommand{\vuoto}{\path (curr@pt) ++(\bl@wid,0mm) coordinate(curr@pt);}
+\newlength\xunit\newlength\yunit
+\newif\ifAssi\Assifalse
+\def\Assi{\@ifnextchar [ {\@Assi}{\@Assi[b;1cm,1cm]}}
+\def\@Assi[#1;#2]{\ifempty{#1}{\@@Assi[b;#2,]}{\@@Assi[#1;#2,]}}
+\def\@@Assi[#1;#2,#3]{\ifempty{#3}{\@@@Assi[#1;#2,#2,]}{\@@@Assi[#1;#2,#3]}}
+\def\@@@Assi[#1;#2,#3,](#4,#5)(#6,#7)#8{\Assitrue\begin{tikzpicture}%
+	\renewcommand{\wt}{\wt@tikz}%
+	\renewcommand{\stem}{\stem@tikz}%
+	\renewcommand{\strem}{\strem@tikz}%
+	\pgfsetxvec{\pgfpoint{#2}{0mm}}\pgfsetyvec{\pgfpoint{0mm}{#3}}
+	\setlength{\xunit}{#2}\setlength{\yunit}{#3} #8
+	\begin{scope}[>=latex]
+	\ifx#1h\draw[->] (#4,0)--(#6,0);\fi%
+	\ifx#1v\draw[->] (0,#5)--(0,#7);\fi%
+	\ifx#1b\draw[->] (#4,0)--(#6,0);\draw[->] (0,#5)--(0,#7);\fi%
+	\ifx#11\draw[->] (#4,#5)--(#6,#5);\draw[->] (#4,#5)--(#4,#7);\fi%
+%	\ifx#1p\put(#2,0){\put(#4,0){\vector(1,0)0}}%
+%		\put(0,#3){\put(0,#5){\vector(0,1)0}}\fi%
+	\ifx#1f\draw (#4,#5) rectangle (#6,#7);\fi%
+	\ifx#1t\draw[transparent] (#4,#5) rectangle (#6,#7);\fi%
+	\ifx#1n\fi%
+	\end{scope}
+\end{tikzpicture}\Assifalse}
+\newcommand\mygrid[1][color=black!50]{\my@grid[#1]}
+\def\my@grid[#1](#2)(#3)(#4,#5)%
+	{\draw[xstep=#4\xunit,ystep=#5\yunit,#1](#2) grid (#3);}
+\newcommand\xlabs[2][0]{\foreach\x in {#2}{\wm(\x,#1;t){\x}}}	
+\newcommand\ylabs[2][0]{\foreach\y in {#2}{\wm(#1,\y;r){\y}}}	
+\newcommand\xlabsdiv[2][0]{\foreach\x/\lab in {#2}{\wm(\x,#1;t){\lab}}}	
+\newcommand\ylabsdiv[2][0]{\foreach\y/\lab in {#2}{\wm(#1,\y;r){\lab}}}	
+\def\rrcosplot(#1;#2,#3)% #1 roll-off, #2 fre simb, #3 ampiezza
+{\begin{tikzpicture}\draw[x=#2\unitlength,y=#3\unitlength,z={(#1,0)}] (-0.5,0,-0.5) sin (-0.5,1,0.5) -- (0.5,1,-0.5) cos (0.5,0,0.5);\end{tikzpicture}} 	
+\def\gausspulse{}
+%
+\else	
+%%% SENZA TIKZ
+% disegna y = A rcos(r,x/W) 
+% con #1 = A/2, #2 = W/2, #3 = rW/2, #4 = (1-r)W/2, #5 = rW/pi
+\newcommand\rcosplot[5]{\put(0,#1){%
+\put(0,#1){\line(1,0){#4}}\put(0,#1){\line(-1,0){#4}}%
+\put(-#2,0){\qbezier(0,0)(#5,#1)(#3,#1)\qbezier(0,0)(-#5,-#1)(-#3,-#1)}%
+\put(#2,0){\qbezier(0,0)(-#5,#1)(-#3,#1)\qbezier(0,0)(#5,-#1)(#3,-#1)}}}	
+% disegna y = A rrcos(r,x/W) 
+% con #1 = A, #2 = W/2, #3 = rW, #4 = (1-r)W/2, #5 = rW(1-1/pi)
+\newcommand\rrcosplot[5]{%
+\put(0,#1){\line(1,0){#4}}\put(0,#1){\line(-1,0){#4}}%
+\put(-#4,0){\qbezier(0,#1)(-#5,#1)(-#3,0)}
+\put(#4,0){\qbezier(0,#1)(#5,#1)(#3,0)}}	
+\newcounter{xcurr}\newcounter{xtot}
+\newcounter{tfnum}\newcounter{cinum}
+\newcommand{\spago}[2]{\put(\thexcurr,0)
+	{\put(0,0){\vector(1,0){20}}\put(10,2){\makebox(0,0)[b]{$#1$}}
+	\put(10,-2){\makebox(0,0)[t]{$#2$}}}\addtocounter{xcurr}{20}}
+\newcommand{\blocco}[2][]{%
+	\put(\thexcurr,-7.5){\framebox(25,15){$\displaystyle #2$}}%
+	\put(\thexcurr,7.5){\makebox(25,0)[b]{\marginbox{#1}}}%
+	\addtocounter{xcurr}{25}}
+\newcommand{\bloccowin}[2][]{\put(\thexcurr,-7.5)
+	{\put(0,0){\framebox(25,15){$\displaystyle #2$}}
+	\multiput(1,0)(23,0){2}{\line(0,1){15}}}
+	\put(\thexcurr,7.5){\makebox(25,0)[b]{\marginbox{#1}}}
+	\addtocounter{xcurr}{25}}
+\newcommand{\eqcascata}{\put(\thexcurr,-7.5){\makebox(25,15){$=$}}
+	\addtocounter{xcurr}{25}}
+\newcommand{\cerchio}[2][+]{\put(\thexcurr,0)
+	{\put(3,0){\circle{6}}\put(3,0){\makebox(0,0){$#1$}}
+	\put(3,-9){\vector(0,1){6}}\wm(3,-9;t){#2}}\addtocounter{xcurr}{6}}
+\newenvironment{duetf}{\begin{center}\setlength{\unitlength}{0.6mm}%
+	\begin{picture}(110,15)(0,-7.5)\setcounter{xcurr}0}
+{\end{picture}\end{center}}
+\newenvironment{cascatatf}[3][0.6mm]{
+	\setcounter{tfnum}{0}\setcounter{cinum}{0}\setcounter{xtot}{20}
+	\whiledo{\value{tfnum} < #2}{\addtocounter{xtot}{45}\stepcounter{tfnum}}
+	\whiledo{\value{cinum} < #3}{\addtocounter{xtot}{26}\stepcounter{cinum}}
+	\begin{center}\setlength{\parindent}{0mm}\setlength{\unitlength}{#1}%
+	\begin{picture}(\thextot,20)(0,-10)\setcounter{xcurr}0}
+{\end{picture}\end{center}}
+\newcommand\grey[2][0.5]
+	{\definecolor{tmp@grey}{gray}{#1}\textcolor{tmp@grey}{#2}}
+\def\greyrect[#1](#2)(#3,#4)
+       {\put(#2){\grey[#1]{\rule{#3\unitlength}{#4\unitlength}}}}
+\def\greyrectrot[#1](#2)(#3,#4)#5
+	{\put(#2){\makebox(0,0){\grey[#1]%
+	{\rotatebox{#5}{\rule{#3\unitlength}{#4\unitlength}}}}}}
+%
+\fi

@@ -1,0 +1,118 @@
+\newcommand\@per{\mbox{for }}
+\newif\ifboldmit
+\newif\ifIEEE
+\DeclareOption{italian}{\renewcommand\@per{\mbox{per }}}
+\DeclareOption{boldmath}{\boldmittrue}
+\DeclareOption{IEEE}{\IEEEtrue}
+\ProcessOptions
+\def\C#1{\mathcal{#1}}
+\def\T#1{{\tt #1}}
+\DeclareSymbolFont{AMSb}{U}{msb}{m}{n}
+\DeclareSymbolFontAlphabet{\mathbb}{AMSb}
+\def\M#1{{\mathbb #1\relax}\relax}
+\ifboldmit
+\def\B#1{\hbox{\boldmath{$#1$}}}
+\def\Bs#1{\hbox{\boldmath{$\scriptstyle #1$}}}
+\else
+\usepackage{amsbsy,bm}
+\def\B{\boldsymbol}
+\def\Bs{\B}
+\fi
+\def\mycases{\@ifstar{\my@cases m}{\my@cases t}}
+\def\twocases{\@ifstar{\two@cases m}{\two@cases t}}
+\def\threecases{\@ifstar{\three@cases m}{\three@cases t}}
+\def\fourcases{\@ifstar{\four@cases m}{\four@cases t}}
+\newcommand{\two@cases}[5]{\left\{\begin{array}{ll}\@case{#1}{#2}{#3} \\ 
+	\@case{#1}{#4}{#5} \end{array} \right.}
+\newcommand{\three@cases}[7]{\left\{\begin{array}{ll}\@case{#1}{#2}{#3} \\ 
+	\@case{#1}{#4}{#5} \\ \@case{#1}{#6}{#7}\end{array} \right.}
+\newcommand{\four@cases}[9]{\left\{\begin{array}{ll}\@case{#1}{#2}{#3} \\ 
+	\@case{#1}{#4}{#5} \\ \@case{#1}{#6}{#7} \\ \@case{#1}{#8}{#9}
+	\end{array} \right.}
+\newcommand{\my@cases}[4]{\left\{\begin{array}{ll}\@case{#1}{#2}{#3} \\ 
+	 \end{array} \right.}
+\newcommand{\@case}[3]{{\displaystyle #2} &\ ,\ \ \ifx#1m #3\else\mbox{#3}\fi}
+\providecommand{\belowspace}[1]{\raisebox{-#1}{\rule{0mm}{0mm}}}	
+\providecommand{\dopped}[2]{\shortstack{$\scriptstyle #1$ \\ $\scriptstyle #2$}}
+\providecommand{\sub}[1]{\ensuremath{_{\rm #1}}}
+\newcommand{\ssub}[2]{\ensuremath{_{{\rm #1},#2}}}
+\providecommand{\super}[1]{\ensuremath{^{\rm #1}}}
+\providecommand{\comp}{}
+\providecommand{\P}{}
+\providecommand{\E}{}
+\renewcommand{\comp}[1]{\super{c}}
+\renewcommand{\P}[1]{\mathop{\rm P}\nolimits\left[#1\right]}
+\renewcommand{\E}[1]{\mathop{\rm E}\nolimits\left[#1\right]}
+\providecommand{\vet}[1]{\left[#1\right]}
+\newcommand{\abs}[1]{\left|#1\right|}
+\providecommand{\tra}{\super{T}}
+\providecommand{\setg}[1]{\left\{#1\right\}}
+\providecommand{\setgv}[2]{\left\{#1\tc #2\right\}}
+\providecommand{\setl}[1]{\setg{\mbox{#1}}}
+\providecommand{\tfr}[2]{\left(\frac{#1}{#2}\right)}
+\providecommand{\tc}{\,:\,}
+\providecommand{\imp}{\ensuremath{\quad\Rightarrow\quad}}
+\providecommand{\coimp}{\ensuremath{\quad\Leftrightarrow\quad}}
+\providecommand{\impt}{\ensuremath{\;\Rightarrow\;}}
+\providecommand{\coimpt}{\ensuremath{\;\Leftrightarrow\;}}
+\providecommand{\arrF}{\stackrel{\C(F)}{\longrightarrow}}
+\newlength\tmp@length
+\newcommand{\sist}[1]{\left\{\begin{array}{l}#1\end{array}\right.}
+\newcommand{\twosol}[2]{{\setlength{\arraycolsep}{0mm}
+\begin{array}{c}\nearrow\\\searrow\end{array}\setlength{\arraycolsep}{0.5mm}
+\begin{array}{l}\rule[-2ex]{0pt}{2ex}\displaystyle #1\\\rule[1ex]{0pt}{2ex}\displaystyle #2\end{array}}}
+\providecommand{\qv}{\ \ \ ,\ \ \ \ }
+\providecommand{\qvq}{\ \ ,\ \ \ }
+\providecommand{\vl}{\ ,\ \ }
+\providecommand{\rect}{\mathop{\rm rect}\nolimits}
+\providecommand{\rank}{\mathop{\rm rank}\nolimits}
+\providecommand{\diag}{\mathop{\rm diag}\nolimits}
+\providecommand{\DFT}{\mathop{\rm DFT}\nolimits}
+\providecommand{\sinc}{\mathop{\rm sinc}\nolimits}
+\providecommand{\rcos}{\mathop{\rm rcos}\nolimits}
+\providecommand{\ircos}{\mathop{\rm ircos}\nolimits}
+\providecommand{\area}{\mathop{\rm area}\nolimits}
+\providecommand{\rep}{\mathop{\rm rep}\nolimits}
+\providecommand{\lcm}{\mathop{\rm lcm}\nolimits}
+\providecommand{\triang}{\mathop{\rm triang}\nolimits}
+\providecommand{\irrcos}{\mathop{\rm irrcos}\nolimits}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\theta}{\vartheta}
+\renewcommand{\epsilon}{\varepsilon}
+\newcommand{\matdd}[4]{\left[\begin{array}{cc} #1 & #2 \\ #3 & #4
+	\end{array}\right]}
+\newcommand{\matq}[3][n]{\ifx#1p
+	 \left[\begin{array}{*{#2}{c|}c} #3 \end{array}\right]
+\else\left[\begin{array}{*{#2}{c}} #3 \end{array}\right]
+\fi}
+%\def\e(#1){\ifmmode\refstepcounter{equation}\eqno(\theequation)\label{e:#1}
+%                \else(\ref{e:#1})\fi}
+\newcommand\ds{\displaystyle}
+\newcommand\fract[2]{{\textstyle\frac{#1}{#2}}}
+\newcommand\q{\quad}
+\newcommand{\IntR}[2]{\int_{-\infty}^{+\infty} #2\,{\rm d}#1}
+\newcommand{\IntC}[2]{\int_{\M C} #2\,{\rm d}#1}
+\newcommand{\Int}[4]{\int_{#2}^{#3} #4\,{\rm d}#1}
+\newcommand{\SumZ}[1]{\sum_{#1 = -\infty}^{+\infty}}
+\newcommand{\Sum}[3]{\sum_{#1 = #2}^{#3}}
+\newcommand{\forallv}[1]{\begin{array}{@{\forall\,}l}#1\end{array}}
+%
+\newcommand\be{\begin{equation}}
+\newcommand\ee{\end{equation}}
+\ifIEEE
+ \newcommand\bea[2][]{\begin{IEEEeqnarray*}[#1]{#2}}
+ \newcommand\eea{\end{IEEEeqnarray*}}
+ \newcommand\emc{\IEEEeqnarraymulticol}
+ \newcommand\spa{\IEEEeqnarraynumspace}
+ \newcommand\noe{\IEEEnonumber}
+ \newcommand\e[1]{\ifmmode\IEEEyesnumber\label{e:#1}\else(\ref{e:#1})\fi}
+ \newcommand\es[1]{\ifmmode\IEEEyessubnumber\label{e:#1}\else(\ref{e:#1})\fi}
+ \newcommand\pass[1]{\bea{rCl}#1\eea}
+\else
+\def\e(#1){\ifmmode\refstepcounter{equation}\eqno(\theequation)\label{e:#1}
+                \else(\ref{e:#1})\fi}
+\newcommand{\pass}[1]{\setlength{\tmp@length}{\arraycolsep}%
+	\setlength{\arraycolsep}{0.25\tmp@length}%
+	\begin{eqnarray*} #1 \end{eqnarray*}%
+	\setlength{\arraycolsep}{\tmp@length}}
+\fi
